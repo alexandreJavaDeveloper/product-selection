@@ -1,8 +1,3 @@
-<script>
-
-	
-
-</script>
 <html>
 	<head>
 		<title>Reading List</title>
@@ -10,6 +5,13 @@
 	
 	<body>
 		Product Selection: 
-		<span th:text="${message}"></span>
+		<p th:text="'Hello, ' + ${message} + '!'" />
+		
+		<th:block th:each="smokeTest : ${availableProducts}">
+		    <tr>
+		        <td th:text="${smokeTest.name}">A Smoke Test'</td>
+		    </tr>
+		</th:block>
+	
 	</body>
 </html>

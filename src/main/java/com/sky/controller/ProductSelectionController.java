@@ -40,15 +40,12 @@ public class ProductSelectionController
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index()
     {
-        System.out.println("index");
         return "index";
     }
 
-    // TODO deixar este cara como GET
-
     @RequestMapping(value = "customerLocation", method = RequestMethod.POST)
     public String getCustomerLocation(@RequestBody
-        final MultiValueMap<String, Object> customer, final Model model)
+    final MultiValueMap<String, Object> customer, final Model model)
     {
         try
         {
@@ -58,11 +55,13 @@ public class ProductSelectionController
 
             final List<Product> availableProducts = this.catalogueService.getAvailableProducts(locationId);
 
+            model.addAttribute("message", "ola");
             model.addAttribute("availableProducts", availableProducts);
         }
         catch (final CustomerNotFoundException | InvalidLocationException e)
         {
             model.addAttribute("message", StringsI18N.PROBLEM_RETRIEVING_CUSTOMER_INFORMATION);
+            return "index";
         }
 
         return "productSelection";

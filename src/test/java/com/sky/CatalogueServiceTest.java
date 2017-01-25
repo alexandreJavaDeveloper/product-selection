@@ -98,4 +98,17 @@ public class CatalogueServiceTest
         Assert.assertEquals(5, product.getId().intValue());
         Assert.assertNull(product.getLocation());
     }
+
+    @Test
+    public void testEqualsProduct()
+    {
+        final Product product = new Product();
+        product.setId(new Long(1));
+
+        final Product product2 = new Product();
+        product2.setId(new Long(2));
+
+        Assert.assertFalse(product.equals(product2));
+        Assert.assertTrue(product.equals(product));
+    }
 }

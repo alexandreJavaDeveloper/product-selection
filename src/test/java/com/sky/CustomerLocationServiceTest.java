@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.sky.entity.Customer;
 import com.sky.exception.CustomerNotFoundException;
 import com.sky.repository.CustomerRepository;
 import com.sky.service.CustomerLocationService;
@@ -55,5 +56,18 @@ public class CustomerLocationServiceTest
     {
         final Long customerId = new Long(Long.MAX_VALUE);
         this.customerLocationService.getCustomerLocationId(customerId);
+    }
+
+    @Test
+    public void testEqualsCustomer()
+    {
+        final Customer customer = new Customer();
+        customer.setId(new Long(1));
+
+        final Customer customer2 = new Customer();
+        customer2.setId(new Long(2));
+
+        Assert.assertFalse(customer.equals(customer2));
+        Assert.assertTrue(customer.equals(customer));
     }
 }

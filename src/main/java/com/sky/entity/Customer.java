@@ -46,6 +46,9 @@ public class Customer
     @Override
     public int hashCode()
     {
+        if (this.id == null || this.location == null)
+            return super.hashCode();
+
         return this.id.hashCode() + this.location.hashCode();
     }
 

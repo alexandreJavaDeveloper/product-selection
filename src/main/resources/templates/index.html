@@ -6,8 +6,29 @@
 	<body>
         <form method="POST" action="/productselection/customerLocation">
         	Customer Id:
-        	<input type="text" name="customerId" required="required" />
-            <input type="submit" />
+        	<input type="text" id="customerId" name="customerId" required="required" />
+            <input type="submit" onclick="setCookie();" />
         </form>
 	</body>
 </html>
+
+<script>
+	var key = "customerId";
+	var cookie = getCookie(key);
+	
+	if (cookie != null) {
+		document.getElementById(key).value = cookie;
+	}
+	
+	function setCookie() {
+		var value = document.getElementById(key).value;
+	    var expires = new Date();
+	    expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
+	    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+	}
+	
+	function getCookie(key) {
+	    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+	    return keyValue ? keyValue[2] : null;
+	}
+</script>

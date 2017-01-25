@@ -79,7 +79,10 @@ public class Product implements Comparable<Product>
     @Override
     public int hashCode()
     {
-        return this.id.hashCode() + this.category.hashCode() + this.location.hashCode();
+        if (this.id == null || this.category == null)
+            return super.hashCode();
+
+        return this.id.hashCode() + this.category.hashCode();
     }
 
     @Override
