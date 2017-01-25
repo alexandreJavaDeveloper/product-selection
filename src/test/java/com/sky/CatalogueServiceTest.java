@@ -46,17 +46,16 @@ public class CatalogueServiceTest
         final int locationId = Integer.MAX_VALUE;
         this.catalogueService.getAvailableProducts(locationId);
         Assert.fail();
-
     }
 
     @Test
     public void testValidParam() throws InvalidLocationException
     {
+        // London city
         int locationId = Location.LONDON.getLocationId();
         List<Product> availableProducts = this.catalogueService.getAvailableProducts(locationId);
 
         Collections.sort(availableProducts, (p1, p2) -> p1.compareTo(p2));
-
         Assert.assertEquals(4, availableProducts.size());
 
         Product product = availableProducts.get(0);
@@ -69,7 +68,7 @@ public class CatalogueServiceTest
 
         product = availableProducts.get(2);
         Assert.assertEquals(4, product.getId().intValue());
-        Assert.assertEquals(product.getLocation(), Location.LIVERPOOL);
+        Assert.assertNull(product.getLocation());
 
         product = availableProducts.get(3);
         Assert.assertEquals(5, product.getId().intValue());
@@ -79,5 +78,24 @@ public class CatalogueServiceTest
         availableProducts = this.catalogueService.getAvailableProducts(locationId);
         Assert.assertEquals(3, availableProducts.size());
 
+        // Liverpool city
+        locationId = Location.LIVERPOOL.getLocationId();
+
+        availableProducts = this.catalogueService.getAvailableProducts(locationId);
+
+        Collections.sort(availableProducts, (p1, p2) -> p1.compareTo(p2));
+        Assert.assertEquals(3, availableProducts.size());
+
+        product = availableProducts.get(0);
+        Assert.assertEquals(3, product.getId().intValue());
+        Assert.assertEquals(product.getLocation(), Location.LIVERPOOL);
+
+        product = availableProducts.get(1);
+        Assert.assertEquals(4, product.getId().intValue());
+        Assert.assertNull(product.getLocation());
+
+        product = availableProducts.get(2);
+        Assert.assertEquals(5, product.getId().intValue());
+        Assert.assertNull(product.getLocation());
     }
 }
