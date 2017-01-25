@@ -1,14 +1,31 @@
 <html>
 	<head>
 		<title>Authentication</title>
+		<meta charset="utf-8" />
+		<script src="/js/cookies.js"></script>
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
 	</head>
 	
 	<body>
-        <form method="POST" action="/productselection/customerLocation">
-        	Customer Id:
-        	<input type="text" id="customerId" name="customerId" required="required" />
-            <input type="submit" onclick="setCookie();" />
-        </form>
+		<nav id="menu">
+			<ul>
+				<li><a href="../productselection">Home</a></li>
+				<li><a href="../productselection">Products</a></li>
+				<li><a href="../productselection">Catalogue</a></li>
+			</ul>
+		</nav>
+		
+		<div id="body">
+	        <form method="POST" action="/productselection/customerLocation">
+	        	Customer Id:
+	        	<input type="text" id="customerId" name="customerId" required="required" />
+	            <input type="submit" onclick="setCookie();" />
+	        </form>
+        </div>
+        
+        <footer>
+        	ola footer
+        </footer>
 	</body>
 </html>
 
@@ -18,17 +35,5 @@
 	
 	if (cookie != null) {
 		document.getElementById(key).value = cookie;
-	}
-	
-	function setCookie() {
-		var value = document.getElementById(key).value;
-	    var expires = new Date();
-	    expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
-	    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
-	}
-	
-	function getCookie(key) {
-	    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
-	    return keyValue ? keyValue[2] : null;
 	}
 </script>

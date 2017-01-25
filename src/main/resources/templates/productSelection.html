@@ -1,17 +1,32 @@
-<html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Reading List</title>
+		<title>Product selection</title>
+	 	<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
 	</head>
 	
 	<body>
-		Product Selection: 
-		<p th:text="'Hello, ' + ${message} + '!'" />
+		<nav id="menu">
+			<ul>
+				<li><a href="../productselection">Home</a></li>
+				<li><a href="../productselection">Products</a></li>
+				<li><a href="../productselection">Catalogue</a></li>
+			</ul>
+		</nav>
 		
-		<th:block th:each="smokeTest : ${availableProducts}">
-		    <tr>
-		        <td th:text="${smokeTest.name}">A Smoke Test'</td>
-		    </tr>
-		</th:block>
+		<div id="body">
+			Product Selection: 
+			<p th:text="'Hello, ' + ${message} + '!'" />
+			
+			<th:block th:each="smokeTest : ${availableProducts}">
+			    <tr>
+			        <td th:text="${smokeTest.name}">A Smoke Test'</td>
+			    </tr>
+			</th:block>
+		</div>
 	
+        <footer>
+        	ola footer 2
+        </footer>
 	</body>
 </html>
