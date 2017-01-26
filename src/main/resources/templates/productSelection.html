@@ -4,6 +4,8 @@
 	 	<meta charset="utf-8" />
 		<link rel="stylesheet" type="text/css" href="/css/style.css" />
 		<link rel="stylesheet" type="text/css" href="/css/productSelection.css" />
+		<script src="/js/external/jquery-3.1.1.min.js"></script>
+		<script src="/js/productSelection.js"></script>
 	</head>
 	
 	<body>
@@ -21,7 +23,7 @@
 		    	<table>
 					<tr th:each="product : ${availableProducts}">
 					    <td th:if="${product.isSportCategory()}">
-					        <input type="checkbox" th:value="product.name" th:text="${product.name}" />
+					        <input type="checkbox" th:name="${product.name}" th:value="${product.id}" th:text="${product.name}" onclick="updateBasket();" />
 					    </td>
 					</tr>
 			    </table>
@@ -32,7 +34,7 @@
 		    	<table>
 					<tr th:each="product : ${availableProducts}">
 					    <td th:if="${product.isNewsCategory()}">
-					        <input type="checkbox" th:value="product.name" th:text="${product.name}" />
+					        <input type="checkbox" th:name="${product.name}" th:value="${product.id}" th:text="${product.name}" onclick="updateBasket();" />
 					    </td>
 					</tr>
 			    </table>
@@ -40,11 +42,19 @@
 		    
 		    <div id="div3">
 		    	Basket
+		    	<div id="basketDiv">
+		    		
+		    	</div>
+		    	
+		    	
+<!-- 		    	<form method="POST" action="/productselection/confirmPage"> -->
+<!-- 		    		<input> -->
+<!-- 		    	</form> -->
 		    </div>
 		</div>
-	
+		
         <footer>
-        	ola footer 2
+        	© 2017 Private Company
         </footer>
 	</body>
 </html>

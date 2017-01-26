@@ -15,6 +15,10 @@
 	margin-left: 3%;
 }
 #div3 {
-	background-color: blue;
+	background-color: green;
 	margin-left: 3%;
+}
+td {
+	padding-bottom: 10px;
+	padding-top: 8px;
 }
