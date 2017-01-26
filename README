@@ -3,8 +3,6 @@
 # Date: January, 2017
 #
 
-
-
 # Creation of a Web Application using the following technologies:
 #	- Spring MVC
 #	- Spring Boot
@@ -13,7 +11,10 @@
 #	- H2 database
 #	- Maven
 
-
-# To execute the Web Application:
-#	- Execute the command (root of project): mvn clean package
-#	-
+# How to execute the Web Application ( Execute via shell the following steps ):
+# 	-	git clone https://github.com/alexandreJavaDeveloper/product-selection.git
+#	-   cd product-selection/
+#	- 	mvn clean package
+#	-   java -jar target/sky-0.0.1-SNAPSHOT.jar
+#
+#	- 	http://localhost:8080/productselection  #Access the address

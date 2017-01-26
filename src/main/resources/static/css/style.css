@@ -1,32 +1,41 @@
 html,
 body {
-   margin:0 auto;
-   padding:0;
-   width:1200px;
-   height:100%;
+   	margin: 0 auto;
+   	padding: 0;
+   	width: 1200px;
+   	height: 100%;
+}
+html {
+	background-color: e6e8ed;
+}
+body {
+	background-color: white;
 }
 #container {
-   min-height:100%;
-   position:relative;
+   	min-height: 100%;
+   	position: relative;
 }
 #body {
-   padding-bottom:60px;
-   padding-top: 25px;
-   margin-left: 0px;
-   height: 80%;
+   	padding-bottom: 60px;
+   	padding-top: 25px;
+   	margin-left: 0px;
+   	height: 80%;
 }
 footer {
-   position:absolute;
-   bottom:0;
-   width:1200px;
-   height:75px;
-   background:#6cf;
+   	position: absolute;
+   	bottom: 0;
+   	width: 1200px;
+   	height: 75px;
+   	margin: auto;
+}
+#labelFooter {
+	margin-left: 44%;
 }
 #menu ul li a {
 	padding: 2px 10px;
 	color: #333;
 	text-decoration: none;
-	border-bottom:3px solid #EDEDED;
+	border-bottom: 3px solid #EDEDED;
 	padding-top: 15px;
 	vertical-align: top;
 }
