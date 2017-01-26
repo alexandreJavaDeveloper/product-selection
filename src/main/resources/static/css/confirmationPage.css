@@ -1,0 +1,26 @@
+form {
+	width: 500px;
+	border-radius: 25px;
+	border: 2px solid #73AD21;
+	margin-left: 29%;
+	padding-bottom: 1%;
+}
+input {
+	margin-top: 26px;
+	width: 100px;
+	float: right;
+}
+#inputNo {
+	margin-right: 15px;
+}
+#inputSubmit {
+	margin-right: 15px;
+}
+#customerLabel {
+	margin-left: 25px;
+	
+}
+table {
+	margin-left: 25px;
+	margin-top: 20px;
+}

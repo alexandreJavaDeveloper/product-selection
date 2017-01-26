@@ -3,6 +3,8 @@
 		<title>Confirmation Page</title>
 		<meta charset="utf-8"></meta>
 		<link rel="stylesheet" type="text/css" href="/css/style.css"></link>
+		<link rel="stylesheet" type="text/css" href="/css/confirmationPage.css"></link>
+		<script src="/js/confirmationPage.js"></script>
 	</head>
 	
 	<body>
@@ -15,17 +17,20 @@
 		</nav>
 		
 		<div id="body">
-	    	Customer Id: <label th:text="${customerId}"></label>
-	    	<table>
-				<tr th:each="product : ${products}">
-				    <td>
-				        <label th:value="${product.id}" th:text="${product.name}"></label>
-				    </td>
-				</tr>
-		    </table>
-		    
-		    
-		    
+			<form method="POST" action="/productselection/finalizeSelection">
+		    	<label id="customerLabel">Customer Id:</label> <label th:text="${customerId}"></label>
+		    	
+		    	<table>
+					<tr th:each="product : ${products}">
+					    <td>
+					        - <label th:value="${product.id}" th:text="${product.name}"></label>
+					    </td>
+					</tr>
+			    </table>
+
+				<input type="submit" value="Confirm" id="inputSubmit"></input>
+				<input type="button" value="No" onclick="goBack();" id="inputNo"></input>
+		    </form>
 		</div>
 		
 	    <footer>

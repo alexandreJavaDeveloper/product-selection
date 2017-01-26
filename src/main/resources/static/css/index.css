@@ -4,3 +4,10 @@
 #customerId {
 	margin-left: 6px;
 }
+input {
+	width: 100px;
+	margin-left: 5px;
+}
+form {
+	padding-top: 1%;
+}

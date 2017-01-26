@@ -105,6 +105,13 @@ public class ProductSelectionController
         return "confirmationPage";
     }
 
+    @RequestMapping(value = "finalizeSelection", method = RequestMethod.POST)
+    public String finalizeSelection()
+    {
+        // Would save the confirmation...
+        return "index";
+    }
+
     private Long extractCustomerId(final MultiValueMap<String, Object> customer) throws CustomerNotFoundException
     {
         final String extractedIdValue = (String) customer.get("customerId").get(0);
