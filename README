@@ -1,1 +1,19 @@
-TODO
+#
+# Autor: Alexandre da Silva
+# Date: January, 2017
+#
+
+
+
+# Creation of a Web Application using the following technologies:
+#	- Spring MVC
+#	- Spring Boot
+#	- Spring Data JPA
+#	- Thymeleaf
+#	- H2 database
+#	- Maven
+
+
+# To execute the Web Application:
+#	- Execute the command (root of project): mvn clean package
+#	-
