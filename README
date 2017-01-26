@@ -12,9 +12,9 @@
 #	- Maven
 
 # How to execute the Web Application ( Execute via shell the following steps ):
-# 	-	git clone https://github.com/alexandreJavaDeveloper/product-selection.git
+# 	-   git clone https://github.com/alexandreJavaDeveloper/product-selection.git
 #	-   cd product-selection/
-#	- 	mvn clean package
+#	-   mvn clean package
 #	-   java -jar target/sky-0.0.1-SNAPSHOT.jar
 #
-#	- 	http://localhost:8080/productselection  #Access the address
+#	-   http://localhost:8080/productselection  #Access the address
