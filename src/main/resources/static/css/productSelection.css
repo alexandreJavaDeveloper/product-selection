@@ -1,21 +1,20 @@
 #div1, #div2, #div3 {
 	float: left;
+	width: 28%;
 	height: 73%;
 	margin-top: 40px;
 	position: relative;
+	padding: 14px;
 } 
 #div1 {
-	width: 27%;
 	background-color: green;
-	margin-left: 45px;
+	margin-left: 17px;
 }
 #div2 {
-	width: 27%;
 	background-color: red;
-	margin-left: 5%;
+	margin-left: 3%;
 }
 #div3 {
-	width: 27%;
 	background-color: blue;
-	margin-left: 5%;
+	margin-left: 3%;
 }

@@ -55,7 +55,6 @@ public class ProductSelectionController
 
             final List<Product> availableProducts = this.catalogueService.getAvailableProducts(locationId);
 
-            model.addAttribute("customerId", customerId);
             model.addAttribute("availableProducts", availableProducts);
         }
         catch (final CustomerNotFoundException | InvalidLocationException e)

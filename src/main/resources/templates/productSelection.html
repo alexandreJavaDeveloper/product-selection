@@ -16,16 +16,31 @@
 		</nav>
 		
 		<div id="body">
-<!-- 			<p th:text="'Hello, ' + ${customerId} + '!'" /> -->
-			<div id="div1"></div>
-		    <div id="div2"></div>
-		    <div id="div3"></div>
-<!-- 			Product Selection:  -->
-<!-- 			<th:block th:each="smokeTest : ${availableProducts}"> -->
-<!-- 			    <tr> -->
-<!-- 			        <td th:text="${smokeTest.name}">A Smoke Test'</td> -->
-<!-- 			    </tr> -->
-<!-- 			</th:block> -->
+			<div id="div1">
+				Sports
+		    	<table>
+					<tr th:each="product : ${availableProducts}">
+					    <td th:if="${product.isSportCategory()}">
+					        <input type="checkbox" th:value="product.name" th:text="${product.name}" />
+					    </td>
+					</tr>
+			    </table>
+			</div>
+			
+		    <div id="div2">
+		    	News
+		    	<table>
+					<tr th:each="product : ${availableProducts}">
+					    <td th:if="${product.isNewsCategory()}">
+					        <input type="checkbox" th:value="product.name" th:text="${product.name}" />
+					    </td>
+					</tr>
+			    </table>
+		    </div>
+		    
+		    <div id="div3">
+		    	Basket
+		    </div>
 		</div>
 	
         <footer>

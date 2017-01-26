@@ -68,6 +68,16 @@ public class Product implements Comparable<Product>
         return this.location;
     }
 
+    public boolean isSportCategory()
+    {
+        return Category.SPORTS.equals(this.category);
+    }
+
+    public boolean isNewsCategory()
+    {
+        return Category.NEWS.equals(this.category);
+    }
+
     @Override
     public int compareTo(final Product anotherProduct)
     {
