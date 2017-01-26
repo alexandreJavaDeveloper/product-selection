@@ -16,6 +16,7 @@ body {
    	position: relative;
 }
 #body {
+	padding: 14px;
    	padding-bottom: 60px;
    	padding-top: 25px;
    	margin-left: 0px;

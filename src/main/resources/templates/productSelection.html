@@ -1,9 +1,9 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<title>Product selection</title>
-	 	<meta charset="utf-8" />
-		<link rel="stylesheet" type="text/css" href="/css/style.css" />
-		<link rel="stylesheet" type="text/css" href="/css/productSelection.css" />
+	 	<meta charset="utf-8"></meta>
+		<link rel="stylesheet" type="text/css" href="/css/style.css"></link>
+		<link rel="stylesheet" type="text/css" href="/css/productSelection.css"></link>
 		<script src="/js/external/jquery-3.1.1.min.js"></script>
 		<script src="/js/productSelection.js"></script>
 	</head>
@@ -18,39 +18,39 @@
 		</nav>
 		
 		<div id="body">
-			<div id="div1">
-				Sports
-		    	<table>
-					<tr th:each="product : ${availableProducts}">
-					    <td th:if="${product.isSportCategory()}">
-					        <input type="checkbox" th:name="${product.name}" th:value="${product.id}" th:text="${product.name}" onclick="updateBasket();" />
-					    </td>
-					</tr>
-			    </table>
-			</div>
-			
-		    <div id="div2">
-		    	News
-		    	<table>
-					<tr th:each="product : ${availableProducts}">
-					    <td th:if="${product.isNewsCategory()}">
-					        <input type="checkbox" th:name="${product.name}" th:value="${product.id}" th:text="${product.name}" onclick="updateBasket();" />
-					    </td>
-					</tr>
-			    </table>
-		    </div>
+			<form method="POST" action="/productselection/confirmationPage">
+				<div id="div1">
+					Sports
+			    	<table>
+						<tr th:each="product : ${availableProducts}">
+						    <td th:if="${product.isSportCategory()}">
+						        <input type="checkbox" th:name="${product.name}" th:value="${product.id}" th:text="${product.name}" onclick="updateBasket();"></input>
+						    </td>
+						</tr>
+				    </table>
+				</div>
+				
+			    <div id="div2">
+			    	News
+			    	<table>
+						<tr th:each="product : ${availableProducts}">
+						    <td th:if="${product.isNewsCategory()}">
+						        <input type="checkbox" th:name="${product.name}" th:value="${product.id}" th:text="${product.name}" onclick="updateBasket();"></input>
+						    </td>
+						</tr>
+				    </table>
+			    </div>
+			    
+			    <div id="div3">
+			    	Basket
+			    	<div id="basketDiv"></div>
+			    	
+			    	<input type="submit" value="Checkout" id="submit"></input>
+			    	
+			    </div>
+		    </form>
 		    
-		    <div id="div3">
-		    	Basket
-		    	<div id="basketDiv">
-		    		
-		    	</div>
-		    	
-		    	
-<!-- 		    	<form method="POST" action="/productselection/confirmPage"> -->
-<!-- 		    		<input> -->
-<!-- 		    	</form> -->
-		    </div>
+		    <label style="color: red;" th:text="${errorMessage}"></label>
 		</div>
 		
         <footer>

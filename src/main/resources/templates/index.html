@@ -1,8 +1,9 @@
-<html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<title>Authentication</title>
-		<meta charset="utf-8" />
-		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<meta charset="utf-8"></meta>
+		<link rel="stylesheet" type="text/css" href="/css/style.css"></link>
+		<link rel="stylesheet" type="text/css" href="/css/index.css"></link>
 		<script src="/js/cookies.js"></script>
 	</head>
 	
@@ -16,11 +17,13 @@
 		</nav>
 		
 		<div id="body">
-	        <form method="POST" action="/productselection/customerLocation">
+	        <form method="POST" action="/productselection/customerLocation" id="formIndex">
 	        	Customer Id:
-	        	<input type="text" id="customerId" name="customerId" required="required" />
-	            <input type="submit" onclick="setCookie();" value="Submit" />
+	        	<input type="text" id="customerId" name="customerId" required="required"></input>
+	            <input type="submit" onclick="setCookie();" value="Submit"></input>
 	        </form>
+	        
+	        <label style="color: red;" th:text="${errorMessage}"></label>
         </div>
         
         <footer>

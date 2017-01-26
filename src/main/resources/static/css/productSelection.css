@@ -19,3 +19,10 @@ td {
 	padding-bottom: 10px;
 	padding-top: 8px;
 }
+#submit {
+	width: 100px;
+	height: 50px;
+	float: none;
+	margin-top: 68%;
+	margin-left: 32%;
+}

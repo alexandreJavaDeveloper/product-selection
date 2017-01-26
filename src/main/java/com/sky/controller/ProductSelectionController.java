@@ -1,5 +1,7 @@
 package com.sky.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,14 @@ public class ProductSelectionController
 
     private final CatalogueService catalogueService;
 
+    private final ProductRepository productRepository;
+
+    private Long customerId;
+
     @Autowired
     public ProductSelectionController(final CustomerRepository customerRepository, final ProductRepository productRepository)
     {
+        this.productRepository = productRepository;
         this.customerLocationService = new CustomerLocationService(customerRepository);
         this.catalogueService = new CatalogueService(productRepository);
 
@@ -49,9 +56,9 @@ public class ProductSelectionController
     {
         try
         {
-            final Long customerId = this.extractCustomerId(customer);
+            this.customerId = this.extractCustomerId(customer);
 
-            final int locationId = this.customerLocationService.getCustomerLocationId(customerId);
+            final int locationId = this.customerLocationService.getCustomerLocationId(this.customerId);
 
             final List<Product> availableProducts = this.catalogueService.getAvailableProducts(locationId);
 
@@ -59,11 +66,43 @@ public class ProductSelectionController
         }
         catch (final CustomerNotFoundException | InvalidLocationException e)
         {
-            model.addAttribute("message", StringsI18N.PROBLEM_RETRIEVING_CUSTOMER_INFORMATION);
+            model.addAttribute("errorMessage", StringsI18N.PROBLEM_RETRIEVING_CUSTOMER_INFORMATION);
             return "index";
         }
 
         return "productSelection";
+    }
+
+    @RequestMapping(value = "confirmationPage", method = RequestMethod.POST)
+    public String confirmationPage(@RequestBody
+        final MultiValueMap<String, Object> confirmationPage, final Model model)
+    {
+        if (this.customerId == null || confirmationPage == null)
+            return "index";
+
+        final List<Product> products = new ArrayList<>();
+
+        try
+        {
+            final Collection<List<Object>> values = confirmationPage.values();
+
+            for (final List<Object> list : values)
+            {
+                final Long id = Long.valueOf((String) list.get(0));
+                final Product product = this.productRepository.findOne(id);
+                products.add(product);
+            }
+        }
+        catch (final Exception e)
+        {
+            model.addAttribute("errorMessage", StringsI18N.PROBLEM_RETRIEVING_PRODUCTS_TO_CONFIRMATION);
+            return "productSelection";
+        }
+
+        model.addAttribute("customerId", this.customerId);
+        model.addAttribute("products", products);
+
+        return "confirmationPage";
     }
 
     private Long extractCustomerId(final MultiValueMap<String, Object> customer) throws CustomerNotFoundException

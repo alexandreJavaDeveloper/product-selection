@@ -1,0 +1,35 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Confirmation Page</title>
+		<meta charset="utf-8"></meta>
+		<link rel="stylesheet" type="text/css" href="/css/style.css"></link>
+	</head>
+	
+	<body>
+		<nav id="menu">
+			<ul>
+				<li><a href="../productselection">Home</a></li>
+				<li><a href="../productselection">Products</a></li>
+				<li><a href="../productselection">Catalogue</a></li>
+			</ul>
+		</nav>
+		
+		<div id="body">
+	    	Customer Id: <label th:text="${customerId}"></label>
+	    	<table>
+				<tr th:each="product : ${products}">
+				    <td>
+				        <label th:value="${product.id}" th:text="${product.name}"></label>
+				    </td>
+				</tr>
+		    </table>
+		    
+		    
+		    
+		</div>
+		
+	    <footer>
+        	<label id="labelFooter">© 2017 Private Company</label>
+        </footer>
+	</body>
+</html>
