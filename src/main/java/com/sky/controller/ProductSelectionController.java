@@ -80,7 +80,7 @@ public class ProductSelectionController
 
     @RequestMapping(value = "confirmationPage/", method = RequestMethod.GET)
     public String confirmationPage(@RequestParam
-        final MultiValueMap<String, Object> baskeHidden, final Model model)
+    final MultiValueMap<String, Object> baskeHidden, final Model model)
     {
         if (this.customerId == null || baskeHidden == null)
             return "index";
@@ -118,7 +118,7 @@ public class ProductSelectionController
     @RequestMapping(value = "finalizeSelection", method = RequestMethod.POST)
     public String finalizeSelection()
     {
-        // Would save the confirmation...
+        // Would save the confirmation... That's why method POST
         return "index";
     }
 }
