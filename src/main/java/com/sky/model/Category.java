@@ -1,4 +1,4 @@
-package com.sky.enums;
+package com.sky.model;
 
 public enum Category
 {

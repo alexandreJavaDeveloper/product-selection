@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.sky.entity.Product;
-import com.sky.enums.Location;
+import com.sky.model.Location;
 
 public interface ProductRepository extends JpaRepository<Product, Long>
 {

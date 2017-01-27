@@ -52,7 +52,7 @@ public class ProductSelectionController
 
     @RequestMapping(value = "customerLocation", method = RequestMethod.POST)
     public String getCustomerLocation(@RequestBody
-        final MultiValueMap<String, Object> customer, final Model model)
+    final MultiValueMap<String, Object> customer, final Model model)
     {
         try
         {
@@ -69,13 +69,18 @@ public class ProductSelectionController
             model.addAttribute("errorMessage", StringsI18N.PROBLEM_RETRIEVING_CUSTOMER_INFORMATION);
             return "index";
         }
+        catch (final NumberFormatException e)
+        {
+            model.addAttribute("errorMessage", StringsI18N.PROBLEM_READING_CUSTOMER_ID);
+            return "index";
+        }
 
         return "productSelection";
     }
 
     @RequestMapping(value = "confirmationPage", method = RequestMethod.POST)
     public String confirmationPage(@RequestBody
-        final MultiValueMap<String, Object> confirmationPage, final Model model)
+    final MultiValueMap<String, Object> confirmationPage, final Model model)
     {
         if (this.customerId == null || confirmationPage == null)
             return "index";
@@ -112,16 +117,9 @@ public class ProductSelectionController
         return "index";
     }
 
-    private Long extractCustomerId(final MultiValueMap<String, Object> customer) throws CustomerNotFoundException
+    private Long extractCustomerId(final MultiValueMap<String, Object> customer) throws NumberFormatException
     {
         final String extractedIdValue = (String) customer.get("customerId").get(0);
-        try
-        {
-            return Long.valueOf(extractedIdValue);
-        }
-        catch (final NumberFormatException e)
-        {
-            throw new CustomerNotFoundException();
-        }
+        return Long.valueOf(extractedIdValue);
     }
 }

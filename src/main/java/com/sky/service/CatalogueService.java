@@ -3,8 +3,8 @@ package com.sky.service;
 import java.util.List;
 
 import com.sky.entity.Product;
-import com.sky.enums.Location;
 import com.sky.exception.InvalidLocationException;
+import com.sky.model.Location;
 import com.sky.repository.ProductRepository;
 
 public class CatalogueService

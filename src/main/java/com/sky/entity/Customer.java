@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.sky.enums.Location;
+import com.sky.model.Location;
 
 @Entity
 public class Customer

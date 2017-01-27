@@ -2,8 +2,8 @@ package com.sky.mock;
 
 import com.sky.entity.Customer;
 import com.sky.entity.Product;
-import com.sky.enums.Category;
-import com.sky.enums.Location;
+import com.sky.model.Category;
+import com.sky.model.Location;
 import com.sky.repository.CustomerRepository;
 import com.sky.repository.ProductRepository;
 

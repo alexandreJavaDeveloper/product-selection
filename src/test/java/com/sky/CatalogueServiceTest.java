@@ -12,8 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.sky.entity.Product;
-import com.sky.enums.Location;
 import com.sky.exception.InvalidLocationException;
+import com.sky.model.Location;
 import com.sky.repository.ProductRepository;
 import com.sky.service.CatalogueService;
 

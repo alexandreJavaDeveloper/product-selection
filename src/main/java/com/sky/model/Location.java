@@ -1,4 +1,4 @@
-package com.sky.enums;
+package com.sky.model;
 
 public enum Location
 {
@@ -24,7 +24,6 @@ public enum Location
         return this.name;
     }
 
-    // TODO migrate to Java 8
     public static String getLocationName(final int locationId) throws IllegalArgumentException
     {
         for (final Location location : Location.values())
