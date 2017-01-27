@@ -15,7 +15,8 @@
 		</nav>
 		
 		<div id="body">
-			<label>Sorry for this inappropriate situation. There is a problem with our database. Would you try again in ten minutes?</label>
+			<label style="color: red;" th:text="${message}"></label>
+			<a href="javascript:history.back()">Go Back</a>
         </div>
         
         <footer>

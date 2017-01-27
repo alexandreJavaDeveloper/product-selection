@@ -4,10 +4,7 @@ public class StringsI18N
 {
     public static final String PROBLEM_RETRIEVING_CUSTOMER_INFORMATION = "There was a problem retrieving the customer information.";
 
-    public static final String PROBLEM_READING_CUSTOMER_ID = "Please, enter only numbers.";
+    public static final String PROBLEM_READING_NUMBERS = "Please, enter only numbers.";
 
-    public static final String PROBLEM_RETRIEVING_PRODUCTS_TO_CONFIRMATION = "There was a problem retrieving the products before the confirmation.";
-
-    public static final String INVALID_LOCATION = "Invalid location. Please, logout and login again.";
-
+    public static final String PROBLEM_RETRIEVING_DATABASE_INFORMATION = "There was a problem retrieving data from database information.";
 }

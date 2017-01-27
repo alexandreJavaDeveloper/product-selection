@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.sky.entity.Product;
 import com.sky.exception.CustomerNotFoundException;
 import com.sky.exception.InvalidLocationException;
-import com.sky.i18n.StringsI18N;
 import com.sky.mock.RepositoryMock;
 import com.sky.repository.CustomerRepository;
 import com.sky.repository.ProductRepository;
@@ -52,28 +51,15 @@ public class ProductSelectionController
 
     @RequestMapping(value = "customerLocation/", method = RequestMethod.GET)
     public String getCustomerLocation(@RequestParam("customerId")
-    final String customerIdParam, final Model model)
+    final String customerIdParam, final Model model) throws CustomerNotFoundException, IllegalArgumentException, InvalidLocationException
     {
-        try
-        {
-            this.customerId = Long.valueOf(customerIdParam);
+        this.customerId = Long.valueOf(customerIdParam);
 
-            final int locationId = this.customerLocationService.getCustomerLocationId(this.customerId);
+        final int locationId = this.customerLocationService.getCustomerLocationId(this.customerId);
 
-            final List<Product> availableProducts = this.catalogueService.getAvailableProducts(locationId);
+        final List<Product> availableProducts = this.catalogueService.getAvailableProducts(locationId);
 
-            model.addAttribute("availableProducts", availableProducts);
-        }
-        catch (final CustomerNotFoundException | InvalidLocationException e)
-        {
-            model.addAttribute("errorMessage", StringsI18N.PROBLEM_RETRIEVING_CUSTOMER_INFORMATION);
-            return "index";
-        }
-        catch (final NumberFormatException e)
-        {
-            model.addAttribute("errorMessage", StringsI18N.PROBLEM_READING_CUSTOMER_ID);
-            return "index";
-        }
+        model.addAttribute("availableProducts", availableProducts);
 
         return "productSelection";
     }
@@ -88,26 +74,18 @@ public class ProductSelectionController
         final List<Product> products = new ArrayList<>();
         final Collection<List<Object>> values = baskeHidden.values();
 
-        try
+        for (final List<Object> list : values)
         {
-            for (final List<Object> list : values)
-            {
-                if (list.isEmpty())
-                    continue;
+            if (list.isEmpty())
+                continue;
 
-                final String value = (String) list.get(0);
-                if (value.isEmpty())
-                    continue;
+            final String value = (String) list.get(0);
+            if (value.isEmpty())
+                continue;
 
-                final Long id = Long.valueOf(value);
-                final Product product = this.productRepository.findOne(id);
-                products.add(product);
-            }
-        }
-        catch (final Exception e)
-        {
-            model.addAttribute("errorMessage", StringsI18N.PROBLEM_RETRIEVING_PRODUCTS_TO_CONFIRMATION);
-            return "productSelection";
+            final Long id = Long.valueOf(value);
+            final Product product = this.productRepository.findOne(id);
+            products.add(product);
         }
 
         model.addAttribute("customerId", this.customerId);
@@ -118,7 +96,7 @@ public class ProductSelectionController
     @RequestMapping(value = "finalizeSelection", method = RequestMethod.POST)
     public String finalizeSelection()
     {
-        // Would save the confirmation... That's why method POST
+        // Would save the confirmation... This explain the method POST
         return "index";
     }
 }

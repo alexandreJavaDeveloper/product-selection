@@ -2,43 +2,56 @@ package com.sky.controller;
 
 import java.sql.SQLException;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+import com.sky.exception.CustomerNotFoundException;
+import com.sky.exception.InvalidLocationException;
+import com.sky.i18n.StringsI18N;
+
+@ControllerAdvice
 public class ExceptionHandlingController
 {
+    private final String GENERAL_VIEW_NAME = "error/general";
+
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView exception(final Exception exception)
+    {
+        this.printLog(exception);
+
+        final ModelAndView modelAndView = new ModelAndView(this.GENERAL_VIEW_NAME);
+        modelAndView.addObject("message", StringsI18N.PROBLEM_READING_NUMBERS);
+        return modelAndView;
+    }
+
+    @ExceptionHandler({ CustomerNotFoundException.class, InvalidLocationException.class })
+    public ModelAndView handleCustomerNotFoundAndInvalidLocationException(final Exception exception)
+    {
+        this.printLog(exception);
+
+        final ModelAndView modelAndView = new ModelAndView(this.GENERAL_VIEW_NAME);
+        modelAndView.addObject("message", StringsI18N.PROBLEM_RETRIEVING_CUSTOMER_INFORMATION);
+        return modelAndView;
+    }
+
     @ExceptionHandler({ SQLException.class, DataAccessException.class })
-    public String databaseError()
+    public ModelAndView handleDatabaseException(final Exception exception)
     {
-        // Nothing to do.  Returns the logical view name of an error page, passed
-        // to the view-resolver(s) in usual way.
-        // Note that the exception is NOT available to this view (it is not added
-        // to the model) but see "Extending ExceptionHandlerExceptionResolver"
-        // below.
-        return "databaseError";
+        this.printLog(exception);
+
+        final ModelAndView modelAndView = new ModelAndView(this.GENERAL_VIEW_NAME);
+        modelAndView.addObject("message", StringsI18N.PROBLEM_RETRIEVING_DATABASE_INFORMATION);
+        return modelAndView;
     }
 
-    @ExceptionHandler(Exception.class)
-    public ModelAndView handleError(final HttpServletRequest req, final Exception ex)
+    /**
+     *  Just simulation for Jog4j API.
+     * @param exception
+     */
+    private void printLog(final Exception exception)
     {
-        // Log4j would be interesting
-
-        final ModelAndView mav = new ModelAndView();
-        mav.addObject("exception", ex);
-        mav.addObject("url", req.getRequestURL());
-        mav.setViewName("error");
-        return mav;
-    }
-
-    @RequestMapping("/404.html")
-    public String render404()
-    {
-        return "404";
+        exception.printStackTrace();
     }
 }
