@@ -10,14 +10,14 @@
 	<body>
 		<nav id="menu">
 			<ul>
-				<li><a href="../productselection">Home</a></li>
-				<li><a href="../productselection">Products</a></li>
-				<li><a href="../productselection">Catalogue</a></li>
+				<li><a href="/productselection">Home</a></li>
+				<li><a href="/productselection">Products</a></li>
+				<li><a href="/productselection">Catalogue</a></li>
 			</ul>
 		</nav>
 		
 		<div id="body">
-	        <form method="POST" action="/productselection/customerLocation" id="formIndex">
+	        <form method="GET" action="/productselection/customerLocation/" id="formIndex">
 	        	Customer Id:
 	        	<input type="text" id="customerId" name="customerId" required="required"></input>
 	            <input type="submit" onclick="setCookie();" value="Submit"></input>

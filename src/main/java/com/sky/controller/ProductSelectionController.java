@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sky.entity.Product;
 import com.sky.exception.CustomerNotFoundException;
@@ -50,13 +50,13 @@ public class ProductSelectionController
         return "index";
     }
 
-    @RequestMapping(value = "customerLocation", method = RequestMethod.POST)
-    public String getCustomerLocation(@RequestBody
-    final MultiValueMap<String, Object> customer, final Model model)
+    @RequestMapping(value = "customerLocation/", method = RequestMethod.GET)
+    public String getCustomerLocation(@RequestParam("customerId")
+    final String customerIdParam, final Model model)
     {
         try
         {
-            this.customerId = this.extractCustomerId(customer);
+            this.customerId = Long.valueOf(customerIdParam);
 
             final int locationId = this.customerLocationService.getCustomerLocationId(this.customerId);
 
@@ -78,22 +78,28 @@ public class ProductSelectionController
         return "productSelection";
     }
 
-    @RequestMapping(value = "confirmationPage", method = RequestMethod.POST)
-    public String confirmationPage(@RequestBody
-    final MultiValueMap<String, Object> confirmationPage, final Model model)
+    @RequestMapping(value = "confirmationPage/", method = RequestMethod.GET)
+    public String confirmationPage(@RequestParam
+        final MultiValueMap<String, Object> baskeHidden, final Model model)
     {
-        if (this.customerId == null || confirmationPage == null)
+        if (this.customerId == null || baskeHidden == null)
             return "index";
 
         final List<Product> products = new ArrayList<>();
+        final Collection<List<Object>> values = baskeHidden.values();
 
         try
         {
-            final Collection<List<Object>> values = confirmationPage.values();
-
             for (final List<Object> list : values)
             {
-                final Long id = Long.valueOf((String) list.get(0));
+                if (list.isEmpty())
+                    continue;
+
+                final String value = (String) list.get(0);
+                if (value.isEmpty())
+                    continue;
+
+                final Long id = Long.valueOf(value);
                 final Product product = this.productRepository.findOne(id);
                 products.add(product);
             }
@@ -106,7 +112,6 @@ public class ProductSelectionController
 
         model.addAttribute("customerId", this.customerId);
         model.addAttribute("products", products);
-
         return "confirmationPage";
     }
 
@@ -115,11 +120,5 @@ public class ProductSelectionController
     {
         // Would save the confirmation...
         return "index";
-    }
-
-    private Long extractCustomerId(final MultiValueMap<String, Object> customer) throws NumberFormatException
-    {
-        final String extractedIdValue = (String) customer.get("customerId").get(0);
-        return Long.valueOf(extractedIdValue);
     }
 }

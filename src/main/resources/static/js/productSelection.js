@@ -22,6 +22,11 @@ function createBasketChildren() {
 		if (element.type == "checkbox" && element.checked) {
 		    var value = $("<p></p>").text(" - " + element.name);
 		    $("#basketDiv").append(value);
+		    
+		    // input hidden to send via HTTP GET
+		    var inputHidden = $("<input name='basketHidden' id='" + element.value + "' type='hidden'></input>");
+		    $("#basketDiv").append(inputHidden);
+		    
 		    isOneCheckBoxChecked = true;
 		}
 	}
