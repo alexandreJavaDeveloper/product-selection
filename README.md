@@ -1,3 +1,4 @@
+# Product Selection Application
 
 ## Creation of a Web Application using the following technologies:
 - Spring MVC
