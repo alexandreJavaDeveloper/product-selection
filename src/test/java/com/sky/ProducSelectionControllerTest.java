@@ -24,7 +24,7 @@ import com.sky.repository.CustomerRepository;
 import com.sky.repository.ProductRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class ProducSelectionControllerTest
 {
     @Autowired
