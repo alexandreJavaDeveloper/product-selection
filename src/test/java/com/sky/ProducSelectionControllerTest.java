@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
@@ -23,7 +23,7 @@ import com.sky.exception.InvalidLocationException;
 import com.sky.repository.CustomerRepository;
 import com.sky.repository.ProductRepository;
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ProducSelectionControllerTest
 {
@@ -47,23 +47,54 @@ public class ProducSelectionControllerTest
         this.productSelectionController = new ProductSelectionController(this.customerRepository, this.productRepository);
     }
 
-    @SuppressWarnings("unchecked")
     @Test
-    public void testPageNotFound() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
+    public void testValidCustomerId() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
     {
-        final String customerIdParam = "1";
-        this.productSelectionController.getCustomerLocation(customerIdParam, this.model);
+        String customerId = "1";
+        List<Product> availableProducts = this.getAvailableProducts(customerId);
 
-        final Map<String, Object> asMap = this.model.asMap();
-        final Collection<Object> values = asMap.values();
-
-        final Object[] array = values.toArray();
-
-        final List<Product> availableProducts = (List<Product>) array[0];
         Assert.assertEquals(3, availableProducts.size());
         Assert.assertEquals(new Long(3), availableProducts.get(0).getId());
         Assert.assertEquals(new Long(4), availableProducts.get(1).getId());
         Assert.assertEquals(new Long(5), availableProducts.get(2).getId());
 
+        customerId = "3";
+        availableProducts = this.getAvailableProducts(customerId);
+
+        Assert.assertEquals(4, availableProducts.size());
+        Assert.assertEquals(new Long(1), availableProducts.get(0).getId());
+        Assert.assertEquals(new Long(2), availableProducts.get(1).getId());
+        Assert.assertEquals(new Long(4), availableProducts.get(2).getId());
+        Assert.assertEquals(new Long(5), availableProducts.get(3).getId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidCustomerId() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
+    {
+        final String customerId = "3sfggfdgd";
+        this.productSelectionController.getCustomerLocation(customerId, this.model);
+    }
+
+    @Test(expected = CustomerNotFoundException.class)
+    public void testInvalidCustomerId2() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
+    {
+        final String customerId = "1000";
+        this.productSelectionController.getCustomerLocation(customerId, this.model);
+    }
+
+    @Test(expected = CustomerNotFoundException.class)
+    public void testInvalidCustomerId3() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
+    {
+        final String customerId = "0";
+        this.productSelectionController.getCustomerLocation(customerId, this.model);
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Product> getAvailableProducts(final String customerId) throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
+    {
+        this.productSelectionController.getCustomerLocation(customerId, this.model);
+        final Map<String, Object> asMap = this.model.asMap();
+        final Collection<Object> values = asMap.values();
+        return (List<Product>) values.toArray()[0];
     }
 }
