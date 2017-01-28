@@ -1,9 +1,5 @@
-#
-# Autor: Alexandre da Silva
-# Date: January, 2017
-#
 
-# Creation of a Web Application using the following technologies:
+## Creation of a Web Application using the following technologies:
 #	- Spring MVC
 #	- Spring Boot
 #	- Spring Data JPA
@@ -11,8 +7,8 @@
 #	- H2 database
 #	- Maven
 
-# Why these technologies?
-# 
+## Why these technologies?
+
 # Spring 4 MVC has several features to make the development more fast and to have easy maintenance, e.g.: Dependency injection, easy handling of routes to
 #create in your controller, easy handling between controller and the part of the view (use of Thymeleaf) among others.
 # Still, Spring has a backend structural where uses WebSocket to connect the server and the client, where make it easy to send data from Controller to Frontend.
@@ -25,14 +21,14 @@
 # Maven is a tool that helps the developer to make build of your project, to choose several external libraries and put them into your application just with 
 #little configuration. Maven is one of the most used in the world to build projects.
 
-# What I expect?
+## What I expect?
 #
 # Would like to work in an amazing team where I would have the chance to exchange technical information and everyday looking for personal growth. Always
 #looking for be happy to work consciously to be prepared for new big challenges. This is what let me happy.
 #
 # Thank you.
 
-# How to execute the Web Application ( Execute via shell the following steps ):
+## How to execute the Web Application ( Execute via shell the following steps ):
 # 	-   git clone https://github.com/alexandreJavaDeveloper/product-selection.git
 #	-   cd product-selection/
 #	-   mvn clean package

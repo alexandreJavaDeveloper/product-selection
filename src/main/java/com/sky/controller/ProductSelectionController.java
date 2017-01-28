@@ -66,8 +66,9 @@ public class ProductSelectionController
 
     @RequestMapping(value = "confirmationPage/", method = RequestMethod.GET)
     public String confirmationPage(@RequestParam
-        final MultiValueMap<String, Object> baskeHidden, final Model model)
+    final MultiValueMap<String, Object> baskeHidden, final Model model)
     {
+        // FIXME missing handler of validation
         if (this.customerId == null || baskeHidden == null)
             return "index";
 
