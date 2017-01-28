@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.sky.entity.Product;
@@ -20,7 +19,6 @@ import com.sky.repository.ProductRepository;
 import com.sky.service.CatalogueService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { Application.class })
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class CatalogueServiceTest
 {
@@ -100,18 +98,5 @@ public class CatalogueServiceTest
         product = availableProducts.get(2);
         Assert.assertEquals(5, product.getId().intValue());
         Assert.assertNull(product.getLocation());
-    }
-
-    @Test
-    public void testEqualsProduct()
-    {
-        final Product product = new Product();
-        product.setId(new Long(1));
-
-        final Product product2 = new Product();
-        product2.setId(new Long(2));
-
-        Assert.assertFalse(product.equals(product2));
-        Assert.assertTrue(product.equals(product));
     }
 }

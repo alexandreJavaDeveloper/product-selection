@@ -66,26 +66,21 @@ public class ProductSelectionController
 
     @RequestMapping(value = "confirmationPage/", method = RequestMethod.GET)
     public String confirmationPage(@RequestParam
-    final MultiValueMap<String, Object> baskeHidden, final Model model)
+        final MultiValueMap<String, Object> baskeHidden, final Model model)
     {
-        // FIXME missing handler of validation
-        if (this.customerId == null || baskeHidden == null)
-            return "index";
-
         final List<Product> products = new ArrayList<>();
-        final Collection<List<Object>> values = baskeHidden.values();
+        final Collection<List<Object>> baskestList = baskeHidden.values();
 
-        for (final List<Object> list : values)
+        for (final List<Object> subListBasket : baskestList)
         {
-            if (list.isEmpty())
+            if (subListBasket.isEmpty())
                 continue;
 
-            final String value = (String) list.get(0);
-            if (value.isEmpty())
+            final String productId = (String) subListBasket.get(0);
+            if (productId.isEmpty())
                 continue;
 
-            final Long id = Long.valueOf(value);
-            final Product product = this.productRepository.findOne(id);
+            final Product product = this.productRepository.findOne(Long.valueOf(productId));
             products.add(product);
         }
 

@@ -55,14 +55,11 @@ public class Customer
     @Override
     public boolean equals(final Object obj)
     {
-        if (this == obj)
-            return true;
         if (obj == null)
             return false;
-        if (this.getClass() != obj.getClass())
-            return false;
+
         final Customer other = (Customer) obj;
-        return this.getId() == other.getId();
+        return this.getId().intValue() == other.getId().intValue();
     }
 
     @Override
