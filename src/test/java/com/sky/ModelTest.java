@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.sky.entity.Customer;
 import com.sky.entity.Product;
+import com.sky.i18n.StringsI18N;
 import com.sky.model.Category;
 import com.sky.model.Location;
 
@@ -70,7 +71,8 @@ public class ModelTest
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidLocationBehavior()
     {
-        Location.getLocationName(-1);
+        final String locationName = Location.getLocationName(-1);
+        Assert.assertEquals(null, locationName);
     }
 
     @Test
@@ -88,5 +90,14 @@ public class ModelTest
 
         Assert.assertEquals(2, Category.values().length);
         Assert.assertEquals(Category.NEWS, Category.valueOf(Category.NEWS.getName().toUpperCase()));
+    }
+
+    @Test
+    public void testi18N()
+    {
+        Assert.assertEquals("Please, enter only numbers.", StringsI18N.PROBLEM_READING_NUMBERS);
+        Assert.assertEquals("There was a problem retrieving the customer information.", StringsI18N.PROBLEM_RETRIEVING_CUSTOMER_INFORMATION);
+        Assert.assertEquals("There was a problem retrieving data from database information.", StringsI18N.PROBLEM_RETRIEVING_DATABASE_INFORMATION);
+        final StringsI18N stringsI18N = new StringsI18N();
     }
 }

@@ -23,7 +23,6 @@ import com.sky.controller.ProductSelectionController;
 import com.sky.entity.Product;
 import com.sky.exception.CustomerNotFoundException;
 import com.sky.exception.InvalidLocationException;
-import com.sky.i18n.StringsI18N;
 import com.sky.model.Location;
 import com.sky.repository.CustomerRepository;
 import com.sky.repository.ProductRepository;
@@ -160,14 +159,6 @@ public class ProducSelectionControllerTest
     {
         Assert.assertEquals("index", this.productSelectionController.index());
         Assert.assertEquals("index", this.productSelectionController.finalizeSelection());
-    }
-
-    @Test
-    public void testi18N()
-    {
-        Assert.assertEquals("Please, enter only numbers.", StringsI18N.PROBLEM_READING_NUMBERS);
-        Assert.assertEquals("There was a problem retrieving the customer information.", StringsI18N.PROBLEM_RETRIEVING_CUSTOMER_INFORMATION);
-        Assert.assertEquals("There was a problem retrieving data from database information.", StringsI18N.PROBLEM_RETRIEVING_DATABASE_INFORMATION);
     }
 
     @SuppressWarnings("unchecked")
