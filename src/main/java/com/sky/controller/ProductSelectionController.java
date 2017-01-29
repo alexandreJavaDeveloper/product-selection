@@ -49,6 +49,19 @@ public class ProductSelectionController
 		return "index";
 	}
 
+	/**
+	 * Method GET for retrieving available products by the @param customerId.
+	 * Exceptions could be throw and the Exception Handling make the choice
+	 * to the next view page and the message to informing the user.
+	 *
+	 * @param customerIdParam value informed by user
+	 * @param model used by Spring to handling controller and view. Here is put the list of available products
+	 * to showing in the view
+	 * @return template html name
+	 * @throws CustomerNotFoundException
+	 * @throws IllegalArgumentException
+	 * @throws InvalidLocationException
+	 */
 	@RequestMapping(value = "availableProducts/", method = RequestMethod.GET)
 	public String getAvailableProducts(@RequestParam("customerId")
 	final String customerIdParam, final Model model) throws CustomerNotFoundException, IllegalArgumentException, InvalidLocationException
@@ -64,6 +77,17 @@ public class ProductSelectionController
 		return "productSelection";
 	}
 
+	/**
+	 * Method GET for retrieving products by the choice of user to confirm the page.
+	 * JPA was configured by default by Spring Boot as a memory-based database, so
+	 * I decided not to build a cache of products. As we can see, always in the loop
+	 * is used the "findOne" method to find a product.
+	 *
+	 * @param baskeHidden extension of the Map interface that stores multiple values that was put by the view.
+	 * @param model used by Spring to handling controller and view. Is put customerId and products to showing
+	 * in the view.
+	 * @return template html name
+	 */
 	@RequestMapping(value = "confirmationPage/", method = RequestMethod.GET)
 	public String confirmationPage(@RequestParam
 			final MultiValueMap<String, Object> baskeHidden, final Model model)
