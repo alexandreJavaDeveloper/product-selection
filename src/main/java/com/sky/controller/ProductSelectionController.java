@@ -25,74 +25,74 @@ import com.sky.service.CustomerLocationService;
 @RequestMapping("/productselection")
 public class ProductSelectionController
 {
-    private final CustomerLocationService customerLocationService;
+	private final CustomerLocationService customerLocationService;
 
-    private final CatalogueService catalogueService;
+	private final CatalogueService catalogueService;
 
-    private final ProductRepository productRepository;
+	private final ProductRepository productRepository;
 
-    private Long customerId;
+	private Long customerId;
 
-    @Autowired
-    public ProductSelectionController(final CustomerRepository customerRepository, final ProductRepository productRepository)
-    {
-        this.productRepository = productRepository;
-        this.customerLocationService = new CustomerLocationService(customerRepository);
-        this.catalogueService = new CatalogueService(productRepository);
+	@Autowired
+	public ProductSelectionController(final CustomerRepository customerRepository, final ProductRepository productRepository)
+	{
+		this.productRepository = productRepository;
+		this.customerLocationService = new CustomerLocationService(customerRepository);
+		this.catalogueService = new CatalogueService(productRepository);
 
-        RepositoryMock.initializeFactory(customerRepository, productRepository);
-    }
+		RepositoryMock.initializeFactory(customerRepository, productRepository);
+	}
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public String index()
-    {
-        return "index";
-    }
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public String index()
+	{
+		return "index";
+	}
 
-    @RequestMapping(value = "customerLocation/", method = RequestMethod.GET)
-    public String getCustomerLocation(@RequestParam("customerId")
-    final String customerIdParam, final Model model) throws CustomerNotFoundException, IllegalArgumentException, InvalidLocationException
-    {
-        this.customerId = Long.valueOf(customerIdParam);
+	@RequestMapping(value = "availableProducts/", method = RequestMethod.GET)
+	public String getAvailableProducts(@RequestParam("customerId")
+	final String customerIdParam, final Model model) throws CustomerNotFoundException, IllegalArgumentException, InvalidLocationException
+	{
+		this.customerId = Long.valueOf(customerIdParam);
 
-        final int locationId = this.customerLocationService.getCustomerLocationId(this.customerId);
+		final int locationId = this.customerLocationService.getCustomerLocationId(this.customerId);
 
-        final List<Product> availableProducts = this.catalogueService.getAvailableProducts(locationId);
+		final List<Product> availableProducts = this.catalogueService.getAvailableProducts(locationId);
 
-        model.addAttribute("availableProducts", availableProducts);
+		model.addAttribute("availableProducts", availableProducts);
 
-        return "productSelection";
-    }
+		return "productSelection";
+	}
 
-    @RequestMapping(value = "confirmationPage/", method = RequestMethod.GET)
-    public String confirmationPage(@RequestParam
-        final MultiValueMap<String, Object> baskeHidden, final Model model)
-    {
-        final List<Product> products = new ArrayList<>();
-        final Collection<List<Object>> baskestList = baskeHidden.values();
+	@RequestMapping(value = "confirmationPage/", method = RequestMethod.GET)
+	public String confirmationPage(@RequestParam
+			final MultiValueMap<String, Object> baskeHidden, final Model model)
+	{
+		final List<Product> products = new ArrayList<>();
+		final Collection<List<Object>> baskestList = baskeHidden.values();
 
-        for (final List<Object> subListBasket : baskestList)
-        {
-            if (subListBasket.isEmpty())
-                continue;
+		for (final List<Object> subListBasket : baskestList)
+		{
+			if (subListBasket.isEmpty())
+				continue;
 
-            final String productId = (String) subListBasket.get(0);
-            if (productId.isEmpty())
-                continue;
+			final String productId = (String) subListBasket.get(0);
+			if (productId.isEmpty())
+				continue;
 
-            final Product product = this.productRepository.findOne(Long.valueOf(productId));
-            products.add(product);
-        }
+			final Product product = this.productRepository.findOne(Long.valueOf(productId));
+			products.add(product);
+		}
 
-        model.addAttribute("customerId", this.customerId);
-        model.addAttribute("products", products);
-        return "confirmationPage";
-    }
+		model.addAttribute("customerId", this.customerId);
+		model.addAttribute("products", products);
+		return "confirmationPage";
+	}
 
-    @RequestMapping(value = "finalizeSelection", method = RequestMethod.POST)
-    public String finalizeSelection()
-    {
-        // Would save the confirmation... This explain the method POST
-        return "index";
-    }
+	@RequestMapping(value = "finalizeSelection", method = RequestMethod.POST)
+	public String finalizeSelection()
+	{
+		// Would save the confirmation... This explain the method POST
+		return "index";
+	}
 }

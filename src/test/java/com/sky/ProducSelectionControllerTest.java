@@ -55,7 +55,7 @@ public class ProducSelectionControllerTest
     public void testValidCustomerId() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
     {
         String customerId = String.valueOf("1");
-        this.productSelectionController.getCustomerLocation(customerId, this.model);
+        this.productSelectionController.getAvailableProducts(customerId, this.model);
         List<Product> availableProducts = this.getAvailableProducts();
 
         Assert.assertEquals(3, availableProducts.size());
@@ -65,7 +65,7 @@ public class ProducSelectionControllerTest
         Assert.assertEquals(new Long(5), availableProducts.get(2).getId());
 
         customerId = String.valueOf("3");
-        this.productSelectionController.getCustomerLocation(customerId, this.model);
+        this.productSelectionController.getAvailableProducts(customerId, this.model);
         availableProducts = this.getAvailableProducts();
 
         Assert.assertEquals(4, availableProducts.size());
@@ -79,21 +79,21 @@ public class ProducSelectionControllerTest
     public void testInvalidCustomerId() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
     {
         final String customerId = "3sfggfdgd";
-        this.productSelectionController.getCustomerLocation(customerId, this.model);
+        this.productSelectionController.getAvailableProducts(customerId, this.model);
     }
 
     @Test(expected = CustomerNotFoundException.class)
     public void testInvalidCustomerId2() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
     {
         final String customerId = "1000";
-        this.productSelectionController.getCustomerLocation(customerId, this.model);
+        this.productSelectionController.getAvailableProducts(customerId, this.model);
     }
 
     @Test(expected = CustomerNotFoundException.class)
     public void testInvalidCustomerId3() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
     {
         final String customerId = "0";
-        this.productSelectionController.getCustomerLocation(customerId, this.model);
+        this.productSelectionController.getAvailableProducts(customerId, this.model);
     }
 
     @SuppressWarnings("unchecked")
