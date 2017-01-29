@@ -27,5 +27,5 @@ little configuration. Maven is one of the most tool used in the world to build p
 -   cd product-selection/
 -   mvn clean package
 -   java -jar target/sky-0.0.1-SNAPSHOT.jar
-
 -   http://localhost:8080/productselection  #Access the address
+-   When the initial page of web application is open, fill the "Customer Id" input with the value between: 1 - 4.
