@@ -24,7 +24,7 @@ function createBasketChildren() {
 		    $("#basketDiv").append(value);
 		    
 		    // input hidden to send via HTTP GET
-		    var inputHidden = $("<input name='basketHidden' id='" + element.value + "' type='hidden'></input>");
+		    var inputHidden = $("<input name='basket' value='" + element.value + "' id='" + element.value + "' type='hidden'></input>");
 		    $("#basketDiv").append(inputHidden);
 		    
 		    isOneCheckBoxChecked = true;

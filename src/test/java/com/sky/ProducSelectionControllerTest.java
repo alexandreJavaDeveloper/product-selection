@@ -2,8 +2,8 @@ package com.sky;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,13 +16,12 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import com.sky.controller.ProductSelectionController;
 import com.sky.entity.Product;
 import com.sky.exception.CustomerNotFoundException;
 import com.sky.exception.InvalidLocationException;
+import com.sky.exception.ProductNotfoundException;
 import com.sky.model.Location;
 import com.sky.repository.CustomerRepository;
 import com.sky.repository.ProductRepository;
@@ -54,86 +53,75 @@ public class ProducSelectionControllerTest
     @Test
     public void testValidCustomerId() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
     {
-        String customerId = String.valueOf("1");
+        Long customerId = new Long(1);
         this.productSelectionController.getAvailableProducts(customerId, this.model);
-        List<Product> availableProducts = this.getAvailableProducts();
+
+        Set<Product> availableProducts = this.getAvailableProducts();
 
         Assert.assertEquals(3, availableProducts.size());
-        Assert.assertEquals("Liverpool TV", availableProducts.get(0).toString());
-        Assert.assertEquals(new Long(3), availableProducts.get(0).getId());
-        Assert.assertEquals(new Long(4), availableProducts.get(1).getId());
-        Assert.assertEquals(new Long(5), availableProducts.get(2).getId());
+        Assert.assertTrue(availableProducts.contains(this.productRepository.findOne(new Long(3))));
+        Assert.assertTrue(availableProducts.contains(this.productRepository.findOne(new Long(4))));
+        Assert.assertTrue(availableProducts.contains(this.productRepository.findOne(new Long(5))));
 
-        customerId = String.valueOf("3");
+        customerId = new Long(3);
         this.productSelectionController.getAvailableProducts(customerId, this.model);
         availableProducts = this.getAvailableProducts();
 
         Assert.assertEquals(4, availableProducts.size());
-        Assert.assertEquals(new Long(1), availableProducts.get(0).getId());
-        Assert.assertEquals(new Long(2), availableProducts.get(1).getId());
-        Assert.assertEquals(new Long(4), availableProducts.get(2).getId());
-        Assert.assertEquals(new Long(5), availableProducts.get(3).getId());
+        Assert.assertTrue(availableProducts.contains(this.productRepository.findOne(new Long(1))));
+        Assert.assertTrue(availableProducts.contains(this.productRepository.findOne(new Long(2))));
+        Assert.assertTrue(availableProducts.contains(this.productRepository.findOne(new Long(4))));
+        Assert.assertTrue(availableProducts.contains(this.productRepository.findOne(new Long(5))));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidCustomerId() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
+    @SuppressWarnings("unchecked")
+    private Set<Product> getAvailableProducts() throws IllegalArgumentException
     {
-        final String customerId = "3sfggfdgd";
-        this.productSelectionController.getAvailableProducts(customerId, this.model);
+        final Map<String, Object> asMap = this.model.asMap();
+        final Collection<Object> values = asMap.values();
+        return (Set<Product>) values.toArray()[0];
     }
 
     @Test(expected = CustomerNotFoundException.class)
     public void testInvalidCustomerId2() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
     {
-        final String customerId = "1000";
+        final Long customerId = new Long(1000);
         this.productSelectionController.getAvailableProducts(customerId, this.model);
     }
 
     @Test(expected = CustomerNotFoundException.class)
     public void testInvalidCustomerId3() throws IllegalArgumentException, CustomerNotFoundException, InvalidLocationException
     {
-        final String customerId = "0";
+        final Long customerId = new Long(0);
         this.productSelectionController.getAvailableProducts(customerId, this.model);
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testConfirmationPage() throws IllegalArgumentException
+    public void testConfirmationPage() throws IllegalArgumentException, ProductNotfoundException, CustomerNotFoundException, InvalidLocationException
     {
-        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-        List<Object> listProduct = new ArrayList<>();
-        String productId = "3"; // product with Liverpool location
-        listProduct.add(productId);
-        map.put(productId, listProduct);
+        final Long customerId = new Long(1);
+        final Long[] products = { new Long(3) };
 
-        this.productSelectionController.confirmationPage(map, this.model);
+        // TODO simular que já está no cache no productSelection os products, e enviar tb inválido que não possua..
+
+        // simulate the use of getAvailableProducts
+        this.productSelectionController.getAvailableProducts(customerId, this.model);
+
+        this.productSelectionController.confirmationPage(customerId, products, this.model);
         ArrayList<Product> productsToConfirm = (ArrayList<Product>) this.model.asMap().get("products");
         Assert.assertEquals(1, productsToConfirm.size());
         Assert.assertEquals(Location.LIVERPOOL, productsToConfirm.get(0).getLocation());
-        Assert.assertEquals(new Long(productId), productsToConfirm.get(0).getId());
+        Assert.assertEquals(new Long(3), productsToConfirm.get(0).getId());
         Assert.assertEquals("Liverpool TV", productsToConfirm.get(0).toString());
 
-        map = new LinkedMultiValueMap<String, Object>();
-        listProduct = new ArrayList<>();
-        productId = "3"; // product with Liverpool location
-        listProduct.add(productId);
-        map.put(productId, listProduct);
+        final Long[] products2 = { new Long(3), new Long(4) };
 
-        listProduct = new ArrayList<>();
-        listProduct.add("4"); // product without Location
-        map.put("4", listProduct);
-
-        listProduct = new ArrayList<>();
-        map.put("1", listProduct);
-        listProduct.add("");
-        listProduct = new ArrayList<>();
-        map.put("2", listProduct);
-
-        this.productSelectionController.confirmationPage(map, this.model);
+        this.productSelectionController.confirmationPage(customerId, products2, this.model);
         productsToConfirm = (ArrayList<Product>) this.model.asMap().get("products");
         Assert.assertEquals(2, productsToConfirm.size());
         Assert.assertEquals(Location.LIVERPOOL, productsToConfirm.get(0).getLocation());
-        Assert.assertEquals(new Long(productId), productsToConfirm.get(0).getId());
+        Assert.assertEquals(new Long(3), productsToConfirm.get(0).getId());
         Assert.assertEquals("Liverpool TV", productsToConfirm.get(0).toString());
 
         Assert.assertNull(productsToConfirm.get(1).getLocation());
@@ -141,17 +129,30 @@ public class ProducSelectionControllerTest
         Assert.assertEquals("Sky News", productsToConfirm.get(1).toString());
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testInvalidConfirmationPage() throws ProductNotfoundException
+    {
+        final Long customerId = new Long(1);
+        final Long[] products = null;
+
+        this.productSelectionController.confirmationPage(customerId, products, this.model);
+    }
+
     @SuppressWarnings("unchecked")
     @Test
-    public void testInvalidConfirmationPage() throws IllegalArgumentException
+    public void testInvalidConfirmationPageByWithoutPermissionFromProducts() throws IllegalArgumentException, CustomerNotFoundException,
+        InvalidLocationException, ProductNotfoundException
     {
-        final MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-        final List<Object> listProduct = new ArrayList<>();
-        map.put("1", listProduct);
+        final Long customerId = new Long(1); // customerId from Liverpool location
+        final Long[] products = { new Long(4), new Long(1) }; // products from without location (ok) and from London (have not permission)
 
-        this.productSelectionController.confirmationPage(map, this.model);
+        this.productSelectionController.getAvailableProducts(customerId, this.model);
+
+        this.productSelectionController.confirmationPage(customerId, products, this.model);
+
         final ArrayList<Product> productsToConfirm = (ArrayList<Product>) this.model.asMap().get("products");
-        Assert.assertTrue(productsToConfirm.isEmpty());
+        Assert.assertEquals(1, productsToConfirm.size());
+        Assert.assertEquals(4, productsToConfirm.get(0).getId().intValue());
     }
 
     @Test
@@ -159,13 +160,5 @@ public class ProducSelectionControllerTest
     {
         Assert.assertEquals("index", this.productSelectionController.index());
         Assert.assertEquals("index", this.productSelectionController.finalizeSelection());
-    }
-
-    @SuppressWarnings("unchecked")
-    private List<Product> getAvailableProducts() throws IllegalArgumentException
-    {
-        final Map<String, Object> asMap = this.model.asMap();
-        final Collection<Object> values = asMap.values();
-        return (List<Product>) values.toArray()[0];
     }
 }

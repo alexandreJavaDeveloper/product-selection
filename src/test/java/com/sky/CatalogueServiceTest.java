@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.sky.entity.Product;
 import com.sky.exception.InvalidLocationException;
+import com.sky.exception.ProductNotfoundException;
 import com.sky.model.Location;
 import com.sky.repository.ProductRepository;
 import com.sky.service.CatalogueService;
@@ -47,6 +48,22 @@ public class CatalogueServiceTest
         final int locationId = Integer.MAX_VALUE;
         this.catalogueService.getAvailableProducts(locationId);
         Assert.fail();
+    }
+
+    @Test(expected = ProductNotfoundException.class)
+    public void testInvalidProduct() throws ProductNotfoundException
+    {
+        final Long productId = new Long(Long.MAX_VALUE);
+        this.catalogueService.findOne(productId);
+        Assert.fail();
+    }
+
+    @Test
+    public void testValidFindOneProduct() throws ProductNotfoundException
+    {
+        final Long productId = new Long(1);
+        final Product product = this.catalogueService.findOne(productId);
+        Assert.assertEquals(productId, product.getId());
     }
 
     @Test

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sky.entity.Product;
 import com.sky.exception.InvalidLocationException;
+import com.sky.exception.ProductNotfoundException;
 import com.sky.model.Location;
 import com.sky.repository.ProductRepository;
 
@@ -22,5 +23,15 @@ public class CatalogueService
             throw new InvalidLocationException();
 
         return this.productRepository.findByLocation(Location.findById(locationId));
+    }
+
+    public Product findOne(final Long productId) throws ProductNotfoundException
+    {
+        final Product product = this.productRepository.findOne(productId);
+
+        if (product == null)
+            throw new ProductNotfoundException();
+
+        return product;
     }
 }

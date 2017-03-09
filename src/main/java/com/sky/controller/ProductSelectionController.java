@@ -1,13 +1,15 @@
 package com.sky.controller;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.sky.entity.Product;
 import com.sky.exception.CustomerNotFoundException;
 import com.sky.exception.InvalidLocationException;
+import com.sky.exception.ProductNotfoundException;
 import com.sky.mock.RepositoryMock;
 import com.sky.repository.CustomerRepository;
 import com.sky.repository.ProductRepository;
@@ -25,98 +28,106 @@ import com.sky.service.CustomerLocationService;
 @RequestMapping("/productselection")
 public class ProductSelectionController
 {
-	private final CustomerLocationService customerLocationService;
+    private final CustomerLocationService customerLocationService;
 
-	private final CatalogueService catalogueService;
+    private final CatalogueService catalogueService;
 
-	private final ProductRepository productRepository;
+    private final Map<Long, Set<Product>> mapAvailableProducts;
 
-	private Long customerId;
+    @Autowired
+    public ProductSelectionController(final CustomerRepository customerRepository, final ProductRepository productRepository)
+    {
+        this.mapAvailableProducts = new HashMap<>();
 
-	@Autowired
-	public ProductSelectionController(final CustomerRepository customerRepository, final ProductRepository productRepository)
-	{
-		this.productRepository = productRepository;
-		this.customerLocationService = new CustomerLocationService(customerRepository);
-		this.catalogueService = new CatalogueService(productRepository);
+        this.customerLocationService = new CustomerLocationService(customerRepository);
 
-		RepositoryMock.initializeFactory(customerRepository, productRepository);
-	}
+        this.catalogueService = new CatalogueService(productRepository);
 
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String index()
-	{
-		return "index";
-	}
+        RepositoryMock.initializeFactory(customerRepository, productRepository);
+    }
 
-	/**
-	 * Method GET for retrieving available products by the @param customerId.
-	 * Exceptions could be throw and the Exception Handling make the choice
-	 * to the next view page and the message to informing the user.
-	 *
-	 * @param customerIdParam value informed by user
-	 * @param model used by Spring to handling controller and view. Here is put the list of available products
-	 * to showing in the view
-	 * @return template html name
-	 * @throws CustomerNotFoundException
-	 * @throws IllegalArgumentException
-	 * @throws InvalidLocationException
-	 */
-	@RequestMapping(value = "availableProducts/", method = RequestMethod.GET)
-	public String getAvailableProducts(@RequestParam("customerId")
-	final String customerIdParam, final Model model) throws CustomerNotFoundException, IllegalArgumentException, InvalidLocationException
-	{
-		this.customerId = Long.valueOf(customerIdParam);
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String index()
+    {
+        return "index";
+    }
 
-		final int locationId = this.customerLocationService.getCustomerLocationId(this.customerId);
+    /**
+     * Method GET for retrieving available products by the @param customerId.
+     * Exceptions could be throw and the Exception Handling make the choice
+     * to the next view page and the message to informing the user.
+     *
+     * The availableProducts list is put in the map for retrieving if necessary in the next stages.
+     *
+     * @param customerIdParam value informed by user
+     * @param model used by Spring to handling controller and view. Here is put the list of available products
+     * to showing in the view
+     * @return template html name
+     * @throws CustomerNotFoundException
+     * @throws IllegalArgumentException
+     * @throws InvalidLocationException
+     */
+    @RequestMapping(value = "availableProducts/", method = RequestMethod.GET)
+    public String getAvailableProducts(@RequestParam("customerId")
+    final Long customerId, final Model model) throws CustomerNotFoundException, IllegalArgumentException, InvalidLocationException
+    {
+        final int locationId = this.customerLocationService.getCustomerLocationId(customerId);
 
-		final List<Product> availableProducts = this.catalogueService.getAvailableProducts(locationId);
+        Set<Product> availableProducts = this.mapAvailableProducts.get(customerId);
 
-		model.addAttribute("availableProducts", availableProducts);
+        if (availableProducts == null)
+        {
+            availableProducts = new HashSet<>(this.catalogueService.getAvailableProducts(locationId));
 
-		return "productSelection";
-	}
+            this.mapAvailableProducts.put(customerId, availableProducts);
+        }
 
-	/**
-	 * Method GET for retrieving products by the choice of user to confirm the page.
-	 * JPA was configured by default by Spring Boot as a memory-based database, so
-	 * I decided not to build a cache of products. As we can see, always in the loop
-	 * is used the "findOne" method to find a product.
-	 *
-	 * @param baskeHidden extension of the Map interface that stores multiple values that was put by the view.
-	 * @param model used by Spring to handling controller and view. Is put customerId and products to showing
-	 * in the view.
-	 * @return template html name
-	 */
-	@RequestMapping(value = "confirmationPage/", method = RequestMethod.GET)
-	public String confirmationPage(@RequestParam
-			final MultiValueMap<String, Object> baskeHidden, final Model model)
-	{
-		final List<Product> products = new ArrayList<>();
-		final Collection<List<Object>> baskestList = baskeHidden.values();
+        model.addAttribute("availableProducts", availableProducts);
 
-		for (final List<Object> subListBasket : baskestList)
-		{
-			if (subListBasket.isEmpty())
-				continue;
+        model.addAttribute("customerId", customerId);
 
-			final String productId = (String) subListBasket.get(0);
-			if (productId.isEmpty())
-				continue;
+        return "productSelection";
+    }
 
-			final Product product = this.productRepository.findOne(Long.valueOf(productId));
-			products.add(product);
-		}
+    /**
+     * Method GET for retrieving products by the choice of user to confirm the page.
+     * Use of Map (cache) without need to use database again for retrieving data of Products.
+     *
+     * @param baskeHidden extension of the Map interface that stores multiple values that was put by the view.
+     * @param model used by Spring to handling controller and view. Is put customerId and products to showing
+     * in the view.
+     * @return template html name
+     * @throws ProductNotfoundException
+     */
+    @RequestMapping(value = "confirmationPage/", method = RequestMethod.GET)
+    public String confirmationPage(@RequestParam("customerId")
+    final Long customerId, @RequestParam("basket")
+    final Long[] basket, final Model model) throws ProductNotfoundException
+    {
+        final Set<Product> availableProducts = this.mapAvailableProducts.get(customerId);
 
-		model.addAttribute("customerId", this.customerId);
-		model.addAttribute("products", products);
-		return "confirmationPage";
-	}
+        final List<Product> chosenProducts = new ArrayList<>();
 
-	@RequestMapping(value = "finalizeSelection", method = RequestMethod.POST)
-	public String finalizeSelection()
-	{
-		// Would save the confirmation... This explain the method POST
-		return "index";
-	}
+        for (int i = 0; i < basket.length; i++)
+        {
+            final Long localCustomerId = basket[i];
+            final Product product = this.catalogueService.findOne(localCustomerId);
+
+            if (availableProducts.contains(product))
+                chosenProducts.add(product);
+        }
+
+        model.addAttribute("products", chosenProducts);
+
+        model.addAttribute("customerId", customerId);
+
+        return "confirmationPage";
+    }
+
+    @RequestMapping(value = "finalizeSelection", method = RequestMethod.POST)
+    public String finalizeSelection()
+    {
+        // Would save the confirmation... This explain the method POST
+        return "index";
+    }
 }
